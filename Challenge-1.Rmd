@@ -1,0 +1,24 @@
+---
+title: "Challenge-1"
+author: "Wang Renhe"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Hi, everyone! My name is Renhe a year 2 student majoring in CNM with minor in Sociology.I really enjoy listening to music and travelling. 
+ 
+But I'm new to coding and those stuffs,hopefully I can learn it well :>
+
+```{r, out.height= "300px",out.width="500px",echo=FALSE,eval=TRUE,fig.cap="Hi,Barbies!"}
+knitr::include_graphics("/Users/haley/Desktop/1.jpg")
+```
+
+
