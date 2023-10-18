@@ -1,0 +1,27 @@
+---
+title: "Wingadium Leviosa, welcome to Renhe's magichub!"
+---
+
+### Self-introduction
+Hey there! I'm Renhe, a second-year student majoring in *Communication & New Media* at NUS. I'm enthusiast when it comes to hobbies like traveling, listening to music, and photography. I find solace in those moments when I'm alone with my thoughts, particularly on rainy days. The sound of raindrops hitting the window pane brings me a sense of *inner peace*.
+
+During such days, I'd rather cozy up in bed with a good book and let my mind wander. It's like stepping into another world where all the chores fade away. Music, to me, is like a universal remedy for whatever ails me, especially after a long and tiring day; it has a magical way of soothing my emotions. In addition, I currently serve as the stage manager for the KECD CCA. It's a role that has turned out to be more demanding than I initially imagined. Despite the exhaustion, I find immense satisfaction in immersing myself in the backstage operations and gaining a deeper insight into the drama production process. 
+
+### Course Content
+[week1](https://github.com/renhe7/renhe/tree/main/Week1)
+
+[week2](https://github.com/renhe7/renhe/tree/main/Week2)
+
+[week3](https://github.com/renhe7/renhe/tree/main/Week3)
+
+[week4](https://github.com/renhe7/renhe/tree/main/Week4)
+
+[week5](https://github.com/renhe7/renhe/tree/main/Week5)
+
+[week6](https://github.com/renhe7/renhe/tree/main/Week6)
+
+[week7](https://github.com/renhe7/renhe/tree/main/Week%207)
+
+[week8](https://github.com/renhe7/renhe/tree/main/Week8)
+
+[week9](https://github.com/renhe7/renhe/tree/main/Week9)
