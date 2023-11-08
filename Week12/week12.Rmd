@@ -28,7 +28,7 @@ I get this data set from Kaggle
 
 ```{r,echo=TRUE,eval=TRUE}
 library(tidyverse)
-homicide <- read.csv("database2.csv")
+homicide <- read.csv("database1.csv")
 head(homicide)
 ```
 
