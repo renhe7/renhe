@@ -125,3 +125,171 @@ While there is no significant difference in the use of weapons across different 
 ## (5) How did you implement this entire project? Were there any new concepts that you learnt to implement some aspects of it?
 
 I've generated three graphs by employing different sets of variables, drawing on concepts from my existing knowledge base. Through filtering, selection, and recoding of specific variables, I've crafted plots using ggplot. However, to augment the interactivity of these plots, I've explored a new concept known as ggplotly.
+
+
+
+### Data Story
+
+### Larger question
+
+How do the victim-murderer relationship and the age, and the sex of perpetrators impact the choice of weapons used in homicides?
+
+### Why is it important to address this question?
+
+1. Exploring the intricate relationships between victim-murderer dynamics, perpetrator age, sex(exclude intersex), and weapon choice can provide crucial insights into the contributing factors of homicides. This understanding is pivotal for designing targeted crime prevention strategies that address specific needs and risk factors associated with different scenarios, potentially aiding in the prevention of future crimes (Hsu et al., 2022) 
+
+2. By identifying these preferences, it emphasizes the significance of data-driven decision-making in shaping policies related to weapon control and access (Welsh & Farrington, 2012). This highlights the necessity for nuanced regulations that account for the multifaceted nature of homicides, moving away from implementing uniform measures.
+
+3. Understanding the complex interplay of factors in homicides can enhance public awareness regarding the range of circumstances and motivations behind such events, fostering more informed dialogues and challenging misconceptions (Lewis, 2017).
+
+4. Tailoring interventions to specific age groups and sex groups (exclude intersex) is crucial. Identifying significant weapon preferences in homicides allows law enforcement to focus on particular types of murder, whether within specific age or sex groups. This targeted focus enables specialized attention and consideration to address these distinct concerns effectively.
+
+### Why do you think the data sources that you have curated can help you answer the question?
+
+I have focused on narrowing down the dataset for a more targeted investigation. Instead of considering the entire range from 1980 to 2014, I have opted to concentrate solely on the most recent data from the year 2014. Additionally, to address my specific research question about the relationship between perpetrator age, relationship to the victim, and the weapon used in homicides, I have filtered out irrelevant variables like race and month.
+
+With a streamlined dataset that includes the key columns of "Perpetrator Age," "Relationship," "Weapon," and "Perpetrator Sex," I can conduct pairwise comparisons between these variables. By creating graphs that intersect two variables at a time, I can visualize the relationships between them. This approach allows me to gain a comprehensive view of the proportions for each variable and how they influence the choice of weapons in homicide cases. Ultimately, these insights will be instrumental in addressing the broader research question I have set out to answer.
+
+
+After clearing up the data, including filter the year to only 2014 and a remove all missing values or "Not Clear" values, new dataset is formed.
+
+```{r,echo=FALSE,eval=TRUE}
+library(conflicted)
+#library(dplyr)
+library(tidyverse)
+homicide <- read.csv("dataset3.csv")
+head(homicide)
+```
+
+This table exclusively presents the variables I have specifically selected for assessing their influence on weapon choice in homicide cases.
+
+To simplify the comparison process, I employed the "case when" to categorize the varied relationships in the "Relationship" variable into clear and distinct groups. The first category, labeled "Family," encompasses close blood relationships such as "father", "mother", "daughter", "son", "wife", "brother", "sister", and "husband". The classification of "common-law husband" and "common-law wife" acknowledges their distinct dynamics, characterized by a more open and less conventional relationship than formal marriages (Grossbard & Vernon, 2014). Furthermore, Members of reconstituted families, such as "Stepdaughter," "Stepson," and "Stepfather," are now collectively classified under the category "FamilyAfter." This grouping acknowledges that their sentiments and dynamics within the family may differ from those in the original family structure. Moreover, individuals with close but non-blood ties, where significant responsibilities may not be present, such as friends and boyfriends/girlfriends, are now categorized within the "VeryClose" group. Nevertheless, "Ex-wife" and "Ex-husband" represent former relationships that no longer carry legal responsibilities. "Acquaintance" combines "Employee," "Employer," and "Neighbor," acknowledging their transient or contractual nature. Lastly, "Stranger" designates individuals with whom there is no prior connection. This recoding provides a clearer framework for comparing the impact of different relationship types on the variable "Weapon" in our analysis.
+
+```{r,echo=FALSE,eval=TRUE}
+newdf <- homicide %>%
+  mutate(RelationshipNew = case_when(
+    Relationship == "Mother" ~ "Family",
+    Relationship == "Father" ~ "Family",
+    Relationship == "Family" ~ "Family",
+    Relationship == "Wife" ~ "Family",
+    Relationship == "Daughter" ~ "Family",
+    Relationship == "Son" ~ "Family",
+    Relationship == "Husband" ~ "Family",
+    Relationship == "In-Law" ~ "Family",
+    Relationship == "Sister" ~ "Family",
+    Relationship == "Brother" ~ "Family",
+    Relationship == "Stepdaughter" ~ "FamilyAfter",
+    Relationship == "Stepson" ~ "FamilyAfter",
+    Relationship == "Stepfather" ~ "FamilyAfter",
+    Relationship == "Girlfriend" ~ "VeryClose",
+    Relationship == "Boyfriend" ~ "VeryClose",
+    Relationship == "Boyfriend/Girlfriend" ~ "VeryClose",
+    Relationship == "Friend" ~ "VeryClose",
+    Relationship == "Ex-Wife" ~ "MarriageBefore",
+    Relationship == "Ex-Husband" ~ "MarriageBefore",
+    Relationship == "Acquaintance" ~ "Acquaintance",
+    Relationship == "Employer" ~ "Acquaintance",
+    Relationship == "Employee" ~ "Acquaintance",
+    Relationship == "Neighbor" ~ "Acquaintance",
+    Relationship == "Stranger" ~ "Stranger",
+    Relationship == "Common-Law Wife" ~ "CommonLaw",
+    Relationship == "Common-Law Husband" ~ "CommonLaw",
+  ))
+head(newdf)
+```
+
+### Relationship and its impact to weapon choice
+
+In order to use the latest version of variable "Relationship", I add a new column named "RelationshipNew" using "mutate" function.
+
+```{r,echo=FALSE,eval=TRUE}
+ggplot(data = newdf, aes(x = RelationshipNew, 
+                      fill = Weapon)) +
+  geom_bar(position = "fill") + labs(x = "Relationship between victim and murders", y = "Proportion", title = "Influence of various relationships on the selection of weapons in homicides" )
+```
+
+The bar chart above illustrates the varying proportions of different weapons used in homicides across different relationship categories. In the "Acquaintance" category, approximately 49% of homicides involve handguns, followed by 19% using knives, and 13.5% involving firearms. In the context of common-law relationships, characterized by a more open marriage structure, 25% of cases involve handguns, 25% knives, and 18.8% firearms. Although shotguns and rifles have higher percentages than in the "Acquaintance" category, their overall occurrence is relatively low at 6.25% each. Family-related homicides show a distribution of 28.1% involving handguns, 22.5% blunt objects, and 19% with victims being killed by knives. For reconstituted families, 40.5% of homicides use blunt objects as the main weapon, followed by approximately 22.5% using knives and 22% using handguns. In cases involving ex-wives and ex-husbands, 44% of homicides involve handguns, with an equal proportion (18.8%) for knives, blunt objects, and firearms. Homicides involving strangers exhibit a notable 64% using handguns, 19% using firearms, and 12% using knives. Within the "VeryClose" relationship category, the top three weapons used are 37.5% handguns, 27% knives, and 14% blunt objects. It is worth noticing that "firearm" is a generic term and not a specific type of weapon.
+
+In summary, while the choice of the most frequently used weapons remains consistent across all homicide cases, the proportions vary significantly depending on the nature of the relationship. In cases involving strangers and less familiar relationships, handguns play a prominent role, likely due to their accessibility and ease of concealment. In California, obtaining a gun involves obtaining a hunter education certificate and undergoing a background check, a process that can be completed relatively swiftly (Wertz et al., 2018). Conversely, as relationships grow closer, as seen in family-related homicides, the distribution of weapon choices becomes more evenly spread. This suggests that in closely related individuals, there is less favoritism towards specific weapons, necessitating equal consideration for each type. Notably, family homicides showcase a distinct prevalence of blunt object use, indicating a unique pattern in weapon selection within familial contexts (Mervosh, 2019). Furthermore, the increased occurrence of strangulation in closer relationships can be attributed to the intimate nature of this method, underscoring the proximity between the perpetrator and the victim. The act of killing at close quarters implies a profound connection between the individuals involved, revealing intense animosity or hatred within the familial relationship (Kleck, 2015). These findings also underscore the adverse effects associated with handguns compared to other weapons.
+
+### Perpetrator Sex and impact on weapon choice
+
+I eliminated the blank entries where no data was recorded or where the response was marked as "not sure."
+
+In order to see for females and males, will different perpetrator sex will affect their weapon choice in homicide. Therefore, I create two seperate bar graph using ggplot function.
+
+#### First graph is for male
+
+I use the filter function and pipe operator to select only rows with sex == "male"
+
+```{r,echo=FALSE,eval=TRUE}
+conflicts_prefer(dplyr::filter)
+summer <- newdf %>% filter(Perpetrator.Sex == "Male") %>% select (Perpetrator.Sex, Weapon)
+head(summer)
+bar_width <- 1
+ggplot(data = summer, aes(y = Weapon)) + 
+  geom_bar(width = bar_width)
+```
+Based on the presented chart, the primary weapons of choice among male perpetrators in homicides are handguns, knives, and an equal distribution between firearms and blunt objects, with all three standing out prominently.
+
+#### Second graph is for female
+
+I then apply the filter function and pipe operator to select only rows with sex == "female"
+
+```{r,echo=FALSE,eval=TRUE}
+winter <- newdf %>% filter(Perpetrator.Sex == "Female") %>% select (Perpetrator.Sex, Weapon)
+head(winter)
+bar_width <- 1
+ggplot(data = winter, aes(y = Weapon)) +
+  geom_bar(width = bar_width)
+```
+According to the chart above, female perpetrators show a tendency to use handguns, followed by knives, and blunt objects.
+
+Overall, there is a notable absence of significant variation in weapon choices between different sexes. While both males and females commonly use knives as the second weapon of choice, females exhibit a distinctive pattern by using knives with a similar frequency to handguns. As mentioned earlier, handguns' popularity may stem from their direct impact and accessibility (STUDDERT, 2022). However, the considerably higher proportion of knife use in female-perpetrated homicides aligns with historical trends, where knives have been a prevalent choice for committing homicide. This prevalence is attributed to the ubiquitous presence of knives in households, with a significant emotional connection as kitchens, traditionally associated with women due to societal labor division, are considered a female domain (Mervosh, 2019). The connection between females, knives, and the home environment creates a sense of control, contributing to the higher frequency of knife usage in female-perpetrated homicides. 
+
+However, it is crucial to note that the overall trend might not be entirely accurate, as the majority of crimes are committed by males. The diverse contexts and motivations behind homicides for males and females contribute to the complexity of these patterns, making it challenging to establish universally representative trends.
+
+### Perpetrator Age and Weapon Type
+
+```{r,echo=FALSE,eval=TRUE}
+as <- newdf %>% arrange(Perpetrator.Age) 
+head(as)
+```
+
+As the weapon use variable is categorical, I transformed it into a numeric format using the as.numeric function to facilitate the use of ggplot for graphical representation. In this case, I transform all weapon type to numeric, with "Suffocation"=1, "Strangulation"=2, "Shotgun"=3, "Rifle"=4,"Poison"=5, "Knife"=6, "Handgun"= 7, "Gun"=8, "Firearm"=9, "Fire"=10, "Explosives"=11, "Drugs"=12, "Blunt Object"=13. 
+
+```{r,echo=FALSE,eval=TRUE}
+WeaponUse <- newdf$Weapon <- as.integer(factor(newdf$Weapon))
+summary(WeaponUse)
+typeof(WeaponUse)
+```
+
+To make ggolot interactive in github page, I install package called "plotly" and apply ggplotly() function
+
+```{r,echo=FALSE,eval=TRUE}
+library(plotly)
+library(ggplot2)
+gg <- ggplot(newdf, aes(x = Perpetrator.Age, y = WeaponUse)) +
+  geom_point()
+```
+
+```{r,echo=FALSE,eval=TRUE}
+interactive_plot <- ggplotly(gg)
+interactive_plot
+```
+
+"Suffocation"=1, "Strangulation"=2, "Shotgun"=3, "Rifle"=4,"Poison"=5, "Knife"=6, "Handgun"= 7, "Gun"=8, "Firearm"=9, "Fire"=10, "Explosives"=11, "Drugs"=12, "Blunt Object"=13. 
+
+Since it is interactive, each point represent a homicide case, when you point your mouse to either one, you can see the age and weapon use for each perpetrator.
+
+From the provided plot, it's apparent that handguns are the most commonly used weapon across all age groups, indicating consistent use regardless of age. Firearms are predominantly utilized before the age of 65. While blunt objects and knives are primarily employed before the age of 65, there is a notable cluster of homicides involving these weapons in individuals above the age of 75. The accessibility of blunt objects and knives, available in homes and shops, might explain their consistent usage across different age groups. Homicides involving rifles are more prevalent before the age of 60, potentially due to their larger size and weight, making them less feasible for the elderly to handle. Additionally, the thrill associated with rifles might appeal more to the middle-aged and younger population.
+
+Suffocation and strangulation show two peaks around the ages of 25 and 48. These methods may require significant physical strength and a sense of control, with younger individuals potentially acting on strong emotional impulses. The use of drugs in homicides predominantly occurs before the age of 35, with another peak observed between the ages of 53 and 63.
+
+Among various methods, poison and explosives are the least preferred means of homicide, while fire-related incidents display a scattered distribution. The decreasing use of poison could be attributed to advancements in medical technologies. Moreover, the distribution of fire-related incidents appears scattered across different age groups.
+
+### Conclusion of main findings
+
+While there is no significant difference in the use of weapons across different victim-murder relations and sexes, the top three weapons remain consistent. The proportions of each weapon choice reveal noteworthy findings. Strangers, more than half the time, opt for handguns due to their accessibility, while closer relationships tend to involve strangulation, a more intimate method carried out by hand or rope or plastic bags. As relationships become closer, the preference for handguns slightly diminishes, giving way to more intimate or accessible weapons. Amid family dynamics, there is not a discernible preference for a specific weapon; instead, blunt objects, knives, and other firearms are frequently utilized. Despite the US Congress allocating $25 million for gun violence prevention (Rosenberg, 2020), it's imperative to acknowledge that focusing solely on funding and legislative measures in this domain might not be the most comprehensive strategy for preventing murder cases. Exploring other potential aspects related to weapon use, such as gender, age, and neighborhood safety, as suggested by Houtsma & Raines (2023), is vital to ensure a safer society in the future. Regarding sex variations, females exhibit a higher tendency to use knives compared to males. With respect to perpetrator age impacting weapon choice, handguns and blunt objects show no age variation, being utilized across all age groups. Rifles, suffocation, and strangulation tend to occur more frequently within the middle and earlier age groups. This is a way to further reduce murder cases.
+
+
